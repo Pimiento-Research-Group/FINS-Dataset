@@ -24,7 +24,28 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
         occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
 
         #Select only required columns
-        occurrences = occurrences[["accepted_name", "max_ma", "min_ma", "locality_id"]]
+        occurrences = occurrences[["accepted_name", "status", "max_ma", "min_ma", "locality_id"]]
+
+        #DROP DUPLICATES (Optional, occurrences of the same taxon from the same locality with identical ages could represent the same individual or population)
+        occurrences = occurrences.drop_duplicates(keep="first")
+
+        #WRITE OUTPUT FILE
+        occurrences.to_csv(path_to_output, sep="\t", index=False)
+
+    #CREATE AN INPUT FILE FOR GENERA
+    #INCLUDING OCCURRENCES IDENTIFIED DO A GENUS LEVEL AND THE GENUS OF OCCURRENCES IDENTIFIED TO A SPECIES LEVEL
+    if taxonomic_rank == "genus":
+        occurrences = occurrences.loc[(occurrences["rank"] == "species") | (occurrences["rank"] == "genus")]
+
+        #APPLY ANY ADDITIONAL FILTERS (Optional), e.g.:
+
+        #Only occurrences with age resolution below 15 Myr
+        occurrences = occurrences.loc[occurrences["age_range"] <= 15]
+        #Only occurrences belonging to Lamniformes
+        occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
+
+        #Select only required columns
+        occurrences = occurrences[["genus", "genus_status", "max_ma", "min_ma", "locality_id"]]
 
         #DROP DUPLICATES (Optional, occurrences of the same taxon from the same locality with identical ages could represent the same individual or population)
         occurrences = occurrences.drop_duplicates(keep="first")
@@ -33,6 +54,17 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
         occurrences.to_csv(path_to_output, sep="\t", index=False)
 
 
-pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/Database_Merged_V11_Final_new_ages.xlsx", "species", "/Users/kristinakocakova/Dropbox/test.csv")
+
+pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/Database_Merged_V11_Final_new_ages.xlsx", "genus", "/Users/kristinakocakova/Dropbox/test.csv")
 
 
+"""
+NOTE:
+
+When filtering the data for Selachimorph taxa, please use the following
+in order to include Ptychodus and Odontorhytis genera as Selachimorphs
+despite having an incertae sedis superorder
+
+occurrences = occurrences.loc[(occurrences["superorder"].isin(selachis))| (occurrences["genus"] == "Ptychodus")| (occurrences["genus"] == "Odontorhytis")]
+
+"""
