@@ -1,4 +1,21 @@
-#Create an input file for PyRate program from an .xlsx file, options for species and genus level
+"""
+Project: FINS Database
+Author: Kristína Kocáková
+Description:
+Create an input file for PyRate program from an .xlsx file, options for species and genus level, options for additional filtering, e.g. by order, by age range, etc.
+"""
+
+"""
+NOTE:
+
+When filtering the data for Selachimorph taxa, please use the following
+in order to include Ptychodus and Odontorhytis genera as Selachimorphs
+despite having an incertae sedis superorder
+
+selachis = ["Galeomorphii", "Squalomorphii"]
+occurrences = occurrences.loc[(occurrences["superorder"].isin(selachis))| (occurrences["genus"] == "Ptychodus")| (occurrences["genus"] == "Odontorhytis")]
+
+"""
 
 from pandas import *
 
@@ -55,16 +72,7 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
 
 
 
-pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/Database_Merged_V11_Final_new_ages.xlsx", "genus", "/Users/kristinakocakova/Dropbox/test.csv")
+pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "genus", "/Users/kristinakocakova/Dropbox/test.csv")
 
 
-"""
-NOTE:
 
-When filtering the data for Selachimorph taxa, please use the following
-in order to include Ptychodus and Odontorhytis genera as Selachimorphs
-despite having an incertae sedis superorder
-
-occurrences = occurrences.loc[(occurrences["superorder"].isin(selachis))| (occurrences["genus"] == "Ptychodus")| (occurrences["genus"] == "Odontorhytis")]
-
-"""
