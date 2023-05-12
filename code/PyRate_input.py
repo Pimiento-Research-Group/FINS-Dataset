@@ -59,7 +59,7 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
         #Only occurrences with age resolution below 15 Myr
         occurrences = occurrences.loc[occurrences["age_range"] <= 15]
         #Only occurrences belonging to Lamniformes
-        occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
+        # occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
 
         #Select only required columns
         occurrences = occurrences[["genus", "genus_status", "max_ma", "min_ma", "locality_id"]]
@@ -72,7 +72,7 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
 
 
 
-pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "genus", "/Users/kristinakocakova/Dropbox/test.csv")
+pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "genus", "/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/genera/all_genera.txt")
 
 
 
