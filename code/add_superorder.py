@@ -15,7 +15,6 @@ squalomorphii = ["Hexanchiformes", "Squaliformes", "Squatiniformes", "Synechodon
 batoidea = ["Myliobatiformes", "Rajiformes", "Rhinopristiformes", "Torpediniformes"]
 
 
-
 from_pbdb = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx")
 occurences = read_excel(from_pbdb, "Occurrences")
 
@@ -23,8 +22,10 @@ occurences = read_excel(from_pbdb, "Occurrences")
 superorder = []
 
 for i in range(len(occurences["order"].to_list())):
-    if occurences["order"].to_list()[i] in galeomorphii or occurences["order"].to_list()[i] in squalomorphii:
+    if occurences["order"].to_list()[i] in galeomorphii:
         superorder.append("Galeomorphii")
+    elif occurences["order"].to_list()[i] in squalomorphii:
+        superorder.append("Squalomorphii")
     elif occurences["order"].to_list()[i] in batoidea:
         superorder.append("Batoidea")
     elif occurences["order"].to_list()[i] == "incertae sedis":
@@ -60,5 +61,5 @@ for i in range(len(occurences["order"].to_list())):
 
 occurences["superorder"] = superorder
 
-occurences.to_excel("/Users/kristinakocakova/Dropbox/Kristina_PhD/Database/superorder.xlsx")
+occurences.to_excel("/Users/kristinakocakova/Dropbox/superorder.xlsx")
 # The output was then double-checked and copy-pasted into the Occurrences file

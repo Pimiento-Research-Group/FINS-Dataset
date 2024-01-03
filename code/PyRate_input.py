@@ -75,4 +75,25 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
 pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "genus", "/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/genera/all_genera.txt")
 
 
+"""
+Additional option: Modify input file to exclude singletons.
+"""
+
+from pandas import *
+
+species = read_csv(
+    "/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/species/all_species_15Myr_ADENN_extinct.txt",
+    sep="\t")
+from collections import Counter
+
+count = Counter(species["Taxon_name"].to_list())
+dyct = {}
+counts = []
+for i in species["Taxon_name"].to_list():
+    counts.append(count[i])
+
+species["Count"] = counts
+
+species_no_sing = species.loc[species["Count"] != 1]
+species_no_sing.to_csv("/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/species/all_species_15Myr_ADENN_no_singletons.txt", sep = "\t")
 
