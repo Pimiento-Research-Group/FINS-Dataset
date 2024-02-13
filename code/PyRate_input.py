@@ -20,7 +20,7 @@ occurrences = occurrences.loc[(occurrences["superorder"].isin(selachis))| (occur
 from pandas import *
 
 
-def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
+def pyrate_input(path_to_database, taxonomic_rank, path_to_output, adenn = False):
     database = ExcelFile(path_to_database)
     occurrences = read_excel(database, "Occurrences")
 
@@ -32,19 +32,28 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
     #CREATE AN INPUT FILE FOR SPECIES
     if taxonomic_rank == "species":
         occurrences = occurrences.loc[occurrences["rank"] == "species"]
+        occurrences = occurrences.loc[occurrences["early_interval"] != "present"]
 
         #APPLY ANY ADDITIONAL FILTERS (Optional), e.g.:
 
         #Only occurrences with age resolution below 15 Myr
         occurrences = occurrences.loc[occurrences["age_range"] <= 15]
         #Only occurrences belonging to Lamniformes
-        occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
+        # occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
+        # occurrences = occurrences.loc[(occurrences["paleolat"] >= -23.43632) & (occurrences["paleolat"] <= 23.43632)]
 
         #Select only required columns
-        occurrences = occurrences[["accepted_name", "status", "max_ma", "min_ma", "locality_id"]]
+
+        occurrences = occurrences[["accepted_name", "status", "max_ma", "min_ma", "collection_no"]]
+
+
+        occurrences = occurrences.rename(columns={"accepted_name": "taxon_name"})
 
         #DROP DUPLICATES (Optional, occurrences of the same taxon from the same locality with identical ages could represent the same individual or population)
         occurrences = occurrences.drop_duplicates(keep="first")
+
+        if adenn == True:
+            occurrences = occurrences[["accepted_name", "status", "max_ma", "min_ma"]]
 
         #WRITE OUTPUT FILE
         occurrences.to_csv(path_to_output, sep="\t", index=False)
@@ -53,6 +62,7 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
     #INCLUDING OCCURRENCES IDENTIFIED DO A GENUS LEVEL AND THE GENUS OF OCCURRENCES IDENTIFIED TO A SPECIES LEVEL
     if taxonomic_rank == "genus":
         occurrences = occurrences.loc[(occurrences["rank"] == "species") | (occurrences["rank"] == "genus")]
+        occurrences = occurrences.loc[occurrences["early_interval"] != "present"]
 
         #APPLY ANY ADDITIONAL FILTERS (Optional), e.g.:
 
@@ -62,17 +72,22 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
         # occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
 
         #Select only required columns
-        occurrences = occurrences[["genus", "genus_status", "max_ma", "min_ma", "locality_id"]]
+        occurrences = occurrences[["genus", "genus_status", "max_ma", "min_ma", "collection_no"]]
+
+        occurrences = occurrences.rename(columns={"genus": "taxon_name"})
 
         #DROP DUPLICATES (Optional, occurrences of the same taxon from the same locality with identical ages could represent the same individual or population)
         occurrences = occurrences.drop_duplicates(keep="first")
+
+        if adenn == True:
+            occurrences = occurrences.loc[["genus", "genus_status", "max_ma", "min_ma"]]
 
         #WRITE OUTPUT FILE
         occurrences.to_csv(path_to_output, sep="\t", index=False)
 
 
 
-pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "genus", "/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/genera/all_genera.txt")
+pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "species", "/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs_2024/")
 
 
 """
@@ -80,20 +95,24 @@ Additional option: Modify input file to exclude singletons.
 """
 
 from pandas import *
-
-species = read_csv(
-    "/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/species/all_species_15Myr_ADENN_extinct.txt",
-    sep="\t")
 from collections import Counter
+species = read_csv(
+    "/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs_2024/",
+    sep="\t")
 
-count = Counter(species["Taxon_name"].to_list())
+
+count = Counter(species["taxon_name"].to_list())
 dyct = {}
 counts = []
-for i in species["Taxon_name"].to_list():
+for i in species["taxon_name"].to_list():
     counts.append(count[i])
 
 species["Count"] = counts
 
 species_no_sing = species.loc[species["Count"] != 1]
-species_no_sing.to_csv("/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/species/all_species_15Myr_ADENN_no_singletons.txt", sep = "\t")
 
+species_no_sing = species_no_sing[["taxon_name", "status", "min_ma", "max_ma"]]
+species_no_sing.to_csv("/Users/kristinakocakova/Dropbox/Kristina_PhD/Analyses/PyRate/PyRate_Analysis/inputs/species/all_species_15Myr_ADENN_no_singletons.txt", sep = "\t", index = False)
+
+len(unique(species_no_sing["taxon_name"]))
+len(unique(species_no_sing["collection_no"]))
