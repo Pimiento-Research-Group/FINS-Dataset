@@ -10,11 +10,11 @@ Script used for the filtering of the overall FINS dataset to produce datasets co
 NOTE:
 
 When filtering the data for Selachimorph taxa, please use the following
-in order to include Ptychodus and Odontorhytis genera as Selachimorphs
+in order to include Cretomanta and Odontorhytis genera as Selachimorphs
 despite having an incertae sedis superorder
 
 selachis = ["Galeomorphii", "Squalomorphii"]
-occurrences = occurrences.loc[(occurrences["superorder"].isin(selachis))| (occurrences["genus"] == "Ptychodus")| (occurrences["genus"] == "Odontorhytis")]
+occurrences = occurrences.loc[(occurrences["superorder"].isin(selachis))| (occurrences["genus"] == "Odontorhytis")| (occurrences["genus"] == "Cretomanta")]
 
 """
 from pandas import *
@@ -27,6 +27,7 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
 
     occurrences = occurrences.loc[occurrences["evaluation_age"] == "valid_SHARKSXT_project"]
     occurrences = occurrences.loc[occurrences["taxonomy_validation"] == "valid_SHARKSXT_project"]
+    occurrences = occurrences.loc[occurrences["early_interval"] != "present"]
 
     #CREATE AN INPUT FILE FOR SPECIES
     if taxonomic_rank == "species":
@@ -40,7 +41,8 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
         # occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
         # occurrences = occurrences.loc[(occurrences["paleolat"] >= -23.43632) & (occurrences["paleolat"] <= 23.43632)]
 
-
+        #Remove occurrences of the same taxon, collection number and age range
+        occurrences = occurrences.drop_duplicates(subset = ["collection_no", "accepted_name"], keep="first")
         #WRITE OUTPUT FILE
         occurrences.to_excel(path_to_output, index=False)
 
@@ -57,7 +59,10 @@ def pyrate_input(path_to_database, taxonomic_rank, path_to_output):
         #Only occurrences belonging to Lamniformes
         # occurrences = occurrences.loc[occurrences["order"] == "Lamniformes"]
 
+        #Remove occurrences of the same taxon, collection number and age range
+        occurrences = occurrences.drop_duplicates(subset = ["collection_no", "genus"], keep="first")
+
         #WRITE OUTPUT FILE
         occurrences.to_excel(path_to_output, index=False)
 
-pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "species", "/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/filtered/fins_filtered_species.xlsx")
+pyrate_input("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx", "species", "/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/data_for_analyses/fins_filtered_species.xlsx")
