@@ -2,12 +2,12 @@
 Project: FINS Database
 Author: Kristína Kocáková
 Description:
-Addition of time intervals and time in millions of years from Collections to the occurrences from respective Collections
+Addition of time intervals and time in millions of years from Collections to the Occurrences from respective Collections
 """
 
 from pandas import *
 
-fyle = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/Database_Merged_V11_Final_new_ages.xlsx")
+fyle = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx")
 cols = read_excel(fyle, "Collections")
 occs = read_excel(fyle, "Occurrences")
 

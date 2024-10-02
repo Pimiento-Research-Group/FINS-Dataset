@@ -87,8 +87,8 @@ for i, j in enumerate(rank):
             family_list.append("Odontaspididae")
             order_list.append("Lamniformes")
         elif accepted_names[i] not in fam_to_order_dict:
-            family_list.append("CHECK")
-            order_list.append("CHECK")
+            family_list.append("CHECK") #manually checked later
+            order_list.append("CHECK") #manually checked later
         else:
             family_list.append(accepted_names[i])
             order_list.append(fam_to_order_dict[accepted_names[i]])

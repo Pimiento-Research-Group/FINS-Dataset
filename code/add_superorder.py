@@ -33,18 +33,18 @@ for i in range(len(occurences["order"].to_list())):
             superorder.append("Batoidea")
         elif occurences["genus"].to_list()[i] == "Brachyrhizodus":
             superorder.append("Batoidea")
-        elif occurences["genus"].to_list()[i] == "Cretomanta":
+        elif occurences["genus"].to_list()[i] == "Cretomanta": #this genus is a selachimorph despite not having a resolved superorder
             superorder.append("incertae sedis")
         elif occurences["genus"].to_list()[i] == "Nanocetorhinus":
             superorder.append("incertae sedis")
-        elif occurences["genus"].to_list()[i] == "Odontorhytis": #this one is recognised as a selachimorph when filtering data for selachimorph analyses
+        elif occurences["genus"].to_list()[i] == "Odontorhytis": #this genus is a selachimorph despite not having a resolved superorder
             superorder.append("incertae sedis")
-        elif occurences["genus"].to_list()[i] == "Ptychodus": #this one is recognised as a selachimorph when filtering data for selachimorph analyses
+        elif occurences["genus"].to_list()[i] == "Ptychodus": #this genus is a selachimorph despite not having a resolved superorder
             superorder.append("incertae sedis")
         elif occurences["genus"].to_list()[i] == "Spathobatis":
             superorder.append("Batoidea")
         else:
-            superorder.append("CHECK")
+            superorder.append("CHECK") #manually checked later
     elif occurences["order"].to_list()[i] == "unknown order":
         if occurences["rank"].to_list()[i] == "clade" or occurences["rank"].to_list()[i] == "class" or occurences["rank"].to_list()[i] == "infraclass" or occurences["rank"].to_list()[i] == "subclass" or occurences["rank"].to_list()[i] == "subcohort":
             superorder.append("NA")
@@ -57,7 +57,7 @@ for i in range(len(occurences["order"].to_list())):
         elif occurences["accepted_name"].to_list()[i] == "Pseudoaetobatus" or occurences["accepted_name"].to_list()[i] == "Proteothrinax":
             superorder.append("NA")
         else:
-            superorder.append("CHECK")
+            superorder.append("CHECK") #manually checked later
 
 occurences["superorder"] = superorder
 
