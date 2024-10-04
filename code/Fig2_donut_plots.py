@@ -7,8 +7,6 @@ Plotting of PBDB and literature collections and occurrences, plotting of valid a
 """
 from pandas import *
 import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
 from collections import Counter
 
 #load data
