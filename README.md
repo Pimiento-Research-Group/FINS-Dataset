@@ -19,7 +19,7 @@ This repository contains the code and data for the analyses presented in the man
 
 ## Overview
 
-This repository contains the scripts used to curate and visualise the data in the FINS dataset, available here
+This repository contains the scripts used to curate and visualise the data in the FINS dataset, available [here](https://shorturl.at/crNeh).
 
 
 ### Repository Structure
