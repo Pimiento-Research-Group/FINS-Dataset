@@ -25,7 +25,8 @@ This repository contains the scripts used to curate and visualise the data in th
 ### Repository Structure
 
 - **`data/`**  
-  Contains three .xlsx files, which were used to assign valid names to oudtated synonyms and extinct/extant status and higher taxonomy classification to valid taxa. 
+  Contains three .xlsx files, which were used to assign valid names to oudtated synonyms and extinct/extant status and higher taxonomy classification to valid taxa.
+  The synonym tables were obtained from [Shark References](https://shark-references.com/), with the permission of the curators of the website.
 
 
 - **`code/`**  
