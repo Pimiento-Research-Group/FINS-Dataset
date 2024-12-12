@@ -25,11 +25,8 @@ This repository contains the scripts used to curate and visualise the data in th
 ### Repository Structure
 
 - **`data/`**  
-  Contains:
-  - PyRate input files generated and used in these analyses
-  - four pre-trained models used for the estimation of ADE
+  Contains three .xlsx files, which were used to assign valid names to oudtated synonyms and extinct/extant status and higher taxonomy classification to valid taxa. 
+
 
 - **`code/`**  
-  Contains:
-  - the scripts for the analyses
-  - requirements.txt file which containes all the Python packages used
+  Contains scripts used to assign information to collections and occurrences within the dataset. This folder also contains scripts used to produce the figures presented in the article.
