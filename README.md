@@ -31,3 +31,8 @@ This repository contains the scripts used to curate and visualise the data in th
 
 - **`code/`**  
   Contains scripts used to assign information to collections and occurrences within the dataset. This folder also contains scripts used to produce the figures presented in the article.
+---
+
+### Usage notes
+
+Minimum and maximum age was originally collected for collections. Based on the collection number, this information was then transfered from collecitons to the appropriate occurrences. This was done in the add_ages_to_occs.py, 
