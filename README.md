@@ -35,4 +35,20 @@ This repository contains the scripts used to curate and visualise the data in th
 
 ### Usage notes
 
-Minimum and maximum age was originally collected for collections. Based on the collection number, this information was then transfered from collecitons to the appropriate occurrences. This was done in the add_ages_to_occs.py, 
+Most scripts produce a new file which was manually checked after being generated, and once deemed correct was manually pasted into the main FINS files. See notes in individual scripts. 
+
+`add_ages_to_occs.py`
+- Minimum and maximum age was originally collected from the source and added to the collections. Based on the collection number, this information was then transfered to the appropriate occurrences.
+
+`add_superorder.py` and `add_taxonomy.py`
+- Higher taxonomy was assigned based on information obtained from Shark-References.com, see `/data` above
+  
+`valid_names.py`
+- Valid names were assigned to synonyms based on information obtained from Shark-References.com, see `/data` above
+
+`grid_cells_random_ages.R`
+- Collections were assigned to grid cells based on modern coordinates, and 30 random replicates of ages were extracted per collection
+
+`add_paleocoords.R`
+- Paleocoordinates were calculated for each collection based on the output of `grid_cells_random_ages.R`, ocean basin was assigned based on paleocoordinates
+
