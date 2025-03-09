@@ -3,7 +3,7 @@ Project: FINS Database
 Author: Kristína Kocáková
 Description:
 Updating of species and genera from synonyms to valid names based on their identified names, a table of synonyms from Shark-References is
-required, see the data section of the FINS database GitHub page (https://github.com/Pimiento-Research-Group/Sharks-XT-FINS-Database/tree/main)
+required, see the data section of the FINS database GitHub page (https://github.com/Pimiento-Research-Group/FINS-Database/tree/main)
 """
 
 from pandas import *

@@ -2,7 +2,7 @@
 Project: FINS Database
 Author: Kristína Kocáková
 Description:
-Add fossil type from occurrences to collections, calculate percentages, make plot of fossil types
+Add fossil type from occurrences to collections, calculate percentages
 """
 
 from pandas import *
