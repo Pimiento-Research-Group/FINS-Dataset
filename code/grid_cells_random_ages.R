@@ -13,8 +13,7 @@ library(chronosphere)
 library(readxl)
 
 # Load in data
-coll_dat <- read_xlsx('/Users/amandagardiner/Dropbox/Analyses/Data/Master\ files/fins.xlsx', 
-                 sheet = 'Collections')
+coll_dat <- read_xlsx('/Users/kristinakocakova/Dropbox/Analyses/Data/Master\ files/colls_added_March_2025.xlsx')
 
 num_coll <- length(coll_dat$collection_number)
 

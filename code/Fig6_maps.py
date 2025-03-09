@@ -13,6 +13,7 @@ import matplotlib.patches as mpatches
 import numpy as np
 from matplotlib.lines import Line2D
 import seaborn as sns
+from collections import Counter
 
 
 from_pbdb = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx")
@@ -166,11 +167,13 @@ fig.gca().add_artist(centre_circle)
 
 plt.show()
 
+# Alternatively, split the data to pbdb and lit and count continents in each
 
+pbdb = occurrences[occurrences["occurrence_number"].str.contains("PBDB")]
+lit = occurrences[occurrences["occurrence_number"].str.contains("L")]
 
-
-
-
+pbdb_counter = Counter(pbdb["continent"])
+lit_counter = Counter(lit["continent"])
 
 
 

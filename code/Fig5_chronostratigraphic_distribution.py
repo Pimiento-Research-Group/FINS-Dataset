@@ -11,13 +11,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from_pbdb = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx")
-occurences = read_excel(from_pbdb, "Occurrences")
+occs = read_excel(from_pbdb, "Occurrences")
 
 epochs = [[145, 100.5], [100.5, 66], [66, 56], [56, 33.9], [33.9, 23.03], [23.03, 5.333], [5.333, 2.58], [2.58, 0.0117], [0.0117, 0]]
 
 epochs_count = [0]*9
 
-for index, row in occurences.iterrows():
+for index, row in occs.iterrows():
     for j, k in enumerate(epochs):
         if row["min_ma"] >= k[1] and row["max_ma"] <= k[0]:
             epochs_count[j] += 1
@@ -25,7 +25,7 @@ for index, row in occurences.iterrows():
 stages = [[145, 139.8], [139.8, 132.6], [132.6, 129.4], [129.4, 121.4], [121.4, 113], [113, 100.5], [100.5, 93.9], [93.9, 89.8], [89.8, 86.3], [86.3, 83.6], [83.6, 72.1], [72.1, 66], [66, 61.6], [61.6, 59.2], [59.2, 56], [56, 47.8], [47.8, 41.2], [41.2, 37.71], [37.71, 33.9], [33.9, 27.82], [27.82, 23.03], [23.03, 20.44], [20.44, 15.97], [15.97, 13.82], [13.82, 11.63], [11.63, 7.246], [7.246, 5.333], [5.333, 3.6], [3.6, 2.58], [2.58, 1.8], [1.8, 0.774],[0.774, 0.129], [0.129, 0.0117], [0.0117, 0.0082], [0.0082, 0.0042], [0.0042, 0]]
 stages_count = [0]*36
 
-for index, row in occurences.iterrows():
+for index, row in occs.iterrows():
     for j, k in enumerate(stages):
         if row["min_ma"] >= k[1] and row["max_ma"] <= k[0]:
             stages_count[j] += 1

@@ -37,8 +37,8 @@ for (i in 1:length(epochs$epoch)) {
 ## Create dataframe to store all paleocoordinates replicates with random ages
 ## In each round 5 age replicates are used to calculate paleocoords (can't to all 30 at once due to computational restrictions)
 ## Therefore this process is repeated 6 times (producing ...chunkX.csv), each time shifting the age column indices by 5
-
 ## First 6 collumns populated with info from other dataframes
+  num_coll = length(coll_dat)
 coll_paleocoord_lon <- data.frame(matrix(data = NA, nrow=num_coll, ncol=11))
 rownames(coll_paleocoord_lon) <- coll_dat$collection_number
 colnames(coll_paleocoord_lon) <- column_names
