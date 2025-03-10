@@ -57,3 +57,35 @@ for i in cols["collection_number"].to_list():
 cols["n_occs_new"] = n_occs
 
 cols.to_excel("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins_new_n_occs.xlsx")
+
+
+dyct_lat = {}
+dyct_lon = {}
+dyct_ocean = {}
+
+for i, j in enumerate(cols["collection_number"]):
+    dyct_lat[j] = cols["paleolatitude"].to_list()[i]
+    dyct_lon[j] = cols["paleolongitude"].to_list()[i]
+    dyct_ocean[j] = cols["paleoocean"].to_list()[i]
+
+col_num = []
+occ_lat = []
+occ_lon = []
+occ_oc = []
+
+for i in occs["collection.1"]:
+    col_num.append(i)
+    occ_lat.append(dyct_lat[i])
+    occ_lon.append(dyct_lon[i])
+    occ_oc.append(dyct_ocean[i])
+
+df = DataFrame()
+df["col"] = col_num
+df["paleolat"] = occ_lat
+df["plaeolon"] = occ_lon
+df["paleooc"] = occ_oc
+
+
+df.to_excel("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/temp_occs.xlsx")
+
+
