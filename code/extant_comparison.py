@@ -2,18 +2,15 @@
 Project: FINS Database
 Author: Kristína Kocáková
 Description:
-Comparison of species, genera, families and orders present in FINS to the list of extant taxa obtained from Stein et al. 2018
+Comparison of species, genera, families and orders present in FINS to the list of extant taxa obtained from Lookup_taxonomy(extant).xlsx
 """
 
 from pandas import *
 
-stein = read_excel("/Users/kristinakocakova/Dropbox/Kristina_PhD/Database/Extant_taxa_Stein_2018.xlsx")
-stein = stein.loc[stein["Subclass"] != "Holocephali"]
-
-stein_fam = unique(stein["Family"])
-stein["Genus"] = stein['Scientific name'].str.split(' ').str[0]
-stein_gen = unique(stein["Genus"])
-stein_sp = unique(stein["Scientific name"])
+extant = ExcelFile("/Users/kristinakocakova/Dropbox/Kristina_PhD/Database/Lookup_taxonomy(extant).xlsx")
+extant_sp = read_excel(extant, "Species")
+extant_g = read_excel(extant, "Genus")
+extant_f = read_excel(extant, "Family")
 
 fyle = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx")
 occs = read_excel(fyle, "Occurrences")
@@ -25,14 +22,14 @@ fins_fam = unique(occs["family"])
 fins_gen = unique(occs["genus"])
 
 for i in fins_fam:
-    if i not in stein_fam:
+    if i not in extant_f:
         print(i)
-for i in stein_fam:
+for i in extant_f:
     if i not in fins_fam:
         print(i)
 
 c = 0
-for i in stein_gen:
+for i in extant_g:
     if i not in fins_gen:
         c += 1
 
@@ -40,6 +37,6 @@ occs = occs.loc[occs["rank"] == "species"]
 fins_sp = unique(occs["accepted_name"])
 
 c = 0
-for i in stein_sp:
+for i in extant_sp:
     if i not in fins_sp:
         c += 1
