@@ -13,18 +13,20 @@ occs_f["collection_no"] = occs_f["collection_no"].astype("int")
 
 occs_pbdb_orig = read_csv('/Volumes/External_memory/Dropbox/FINS_dataset/Data/Other versions of Database/occurrences.Chondrichthyes.orginaldownload.csv', header = 18)
 
-occs_pbdb = read_csv('/Volumes/External_memory/Downloads/pbdb_data(34).csv', header = 18)
+occs_pbdb_cret = read_excel('/Volumes/External_memory/Dropbox/FINS_dataset/Data/Other versions of Database/occurrences_Cretaceous_download.xlsx')
+
+occs_pbdb_merge = concat([occs_pbdb_orig, occs_pbdb_cret])
 
 # see if there are any collections that are in FINS but not in the downloaded file
 missing = []
 for i in np.unique(occs_f["collection_no"]):
-    if i not in np.unique(occs_pbdb["collection_no"]):
+    if i not in np.unique(occs_pbdb_merge["collection_no"]):
         missing.append(i)
 
 # load the file that has the occurrences from the missing collections and merge with the other
-occs_pbdb_add = read_csv('/Volumes/External_memory/Downloads/pbdb_data(36).csv', header = 16)
+occs_pbdb_add = read_csv('/Volumes/External_memory/Downloads/pbdb_data(37).csv', header = 16)
 
-occs_pbdb_merge = concat([occs_pbdb_orig, occs_pbdb_add, occs_pbdb])
+occs_pbdb_merge = concat([occs_pbdb_merge, occs_pbdb_add])
 
 occs_pbdb_merge = occs_pbdb_merge.drop_duplicates(subset = ["collection_no", "identified_name"])
 
@@ -37,7 +39,7 @@ for i in np.unique(occs_f["collection_no"]):
     if i not in np.unique(occs_pbdb_merge["collection_no"]):
         missing.append(i)
 
-# still one col missing - 13184 - it was since marked as duplicate in PBDB and the occurrence (Ischyrhiza avonicola) is now in col 14562
+# still one col missing - 221132
 
 # find matching identified names and collection numbers, extract occurrence number
 
