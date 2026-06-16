@@ -14,15 +14,20 @@ import numpy as np
 import re
 import itertools
 
-fyle = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx")
-refs_lit = read_excel(fyle, "References_Literature")
-refs_PBDB = read_excel(fyle, "References_PBDB")
+fyle = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/fins.xlsx") # "/Volumes/External_memory/Dropbox/FINS_dataset/Data/Master_files/fins.xlsx"
+# refs_lit = read_excel(fyle, "References_Literature")
+# refs_PBDB = read_excel(fyle, "References_PBDB")
 occurrences = read_excel(fyle, "Occurrences")
+refs = read_excel(fyle, "References")
 
 
-years = refs_PBDB["year"].to_list() + refs_lit["year"].to_list()
-pub_types = refs_PBDB["pubtype"].to_list() + refs_lit["pubtype"].to_list()
-languages = refs_PBDB["language"].to_list() + refs_lit["language"].to_list()
+# years = refs_PBDB["year"].to_list() + refs_lit["year"].to_list()
+# pub_types = refs_PBDB["pubtype"].to_list() + refs_lit["pubtype"].to_list()
+# languages = refs_PBDB["language"].to_list() + refs_lit["language"].to_list()
+
+years = refs["year"]
+pub_types = refs["pubtype"]
+languages = refs["language"]
 
 langs = Counter(languages)
 pub_types = Counter(pub_types)
@@ -207,12 +212,12 @@ plt.show()
 
 dfu = DataFrame()
 
-dfu["year"] = concat([refs_lit["year"], refs_PBDB["year"]])
-dfu["language"] = concat([refs_lit["language"], refs_PBDB["language"]])
+# dfu["year"] = concat([refs_lit["year"], refs_PBDB["year"]])
+# dfu["language"] = concat([refs_lit["language"], refs_PBDB["language"]])
 
+dfu = refs
 
-
-dfu_grouped = dfu.groupby(["language", "year"]).size().reset_index(name="Freq")
+dfu_grouped = refs.groupby(["language", "year"]).size().reset_index(name="Freq")
 
 lang_uniq = ["French", "German", "Spanish", "Japanese", "Russian", "Italian", "Dutch", "Portugese", "Slovenian", "Hungarian", "Catalan", ""]
 
@@ -239,7 +244,7 @@ ax[12].spines['right'].set_visible(False)
 ax[12].spines['top'].set_visible(False)
 ax[12].set_xlabel("Other")
 ax[12].set_xticks([10])
-ax[12].barh(data = dfu_grouped.loc[(dfu_grouped["language"] == "Czech") | (dfu_grouped["language"] == "Korean" )| (dfu_grouped["language"] == "Swedish") | (dfu_grouped["language"] == "Ukranian")] , y= "year", width = "Freq", color = Acton[12], height = 1, edgecolor = Acton[12])
+ax[12].barh(data = dfu_grouped.loc[(dfu_grouped["language"] == "Bulgarian") | (dfu_grouped["language"] == "Czech") | (dfu_grouped["language"] == "Korean" )| (dfu_grouped["language"] == "Swedish") | (dfu_grouped["language"] == "Ukranian")] , y= "year", width = "Freq", color = Acton[12], height = 1, edgecolor = Acton[12])
 
 plt.show()
 
