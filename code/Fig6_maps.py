@@ -56,8 +56,8 @@ oc = sum(oc["n_occs"])
 
 totals = {
     "continent": ["South America", "Antarctica", "Africa", "Ocean", "Europe", "Oceania", "Asia", "North America"],
-    "lon": [-72.65, -56.665558, -9.6, -167, 15.064, 151.381, 70.918, -80.208], # coordinates for the large bubbles summarising the total number of occs in each continent
-    "lat": [-6.866, -64.234718, 10.3, 24, 50.046, -33.005, 38.676, 36.7168],
+    "lon": [-72.65, -56.665558, -9.6, 78.8, 15.064, 151.381, 70.918, -80.208], # coordinates for the large bubbles summarising the total number of occs in each continent
+    "lat": [-6.866, -64.234718, 10.3, -32.1, 50.046, -33.005, 38.676, 36.7168],
     "n_occs": [sa/x, antar/x, afr/x, oc/x, eur/x, oceania/x, asia/x, na/x],
 }
 
