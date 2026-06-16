@@ -1,4 +1,6 @@
 import os
+
+from PIL.ImageOps import expand
 from pandas import *
 from collections import Counter
 import numpy as np
@@ -8,6 +10,15 @@ species_old = read_excel(lookup_old, "Species")
 
 lookup_new = ExcelFile("/Users/kristinakocakova/Dropbox/FINS_dataset/Data/Master_files/lookup_tables/Lookup_Taxonomy_extant_LW.xlsx")
 species_new = read_excel(lookup_new, "Species")
+
+# rename all "Synonym.X" -> "Synonyms.X"
+species_old = species_old.rename(
+    columns=lambda c: c.replace("Synonym.", "Synonyms.") if c.startswith("Syn") else c
+)
+
+species_new = species_new.rename(
+    columns=lambda c: c.replace("Synonym.", "Synonyms.") if c.startswith("Syn") else c
+)
 
 dyct_new_full = {}
 
@@ -26,35 +37,51 @@ dyct_old_full = {k: [elem for elem in v if elem is not np.nan] for k, v in dyct_
 
 
 # find species which are treated as valid names in the original table but are synonyms in the new table
-outdated = []
+outdated = set()
 
-for i in species_old["Species"]:
-    for j in dyct_new_full:
-        if i in dyct_new_full[j]:
-            outdated.append(i)
+# old valid name appears as a synonym in the new table
+for name in species_old["Species"]:
+    for syns in dyct_new_full.values():
+        if name in syns:
+            outdated.add(name)
 
-for i in species_new["Species"]:
-    for j in dyct_old_full:
-        if i in dyct_old_full[j]:
-            outdated.append(i)
+# new valid name appears as a synonym in the old table
+for name in species_new["Species"]:
+    for syns in dyct_old_full.values():
+        if name in syns:
+            outdated.add(name)
 
-# create new rows for these species with the correct valid names and synonyms
+# get replacement rows from the new file
 
-df_new = DataFrame(columns = species_new.columns)
+# Collect rows where any cell (valid name or synonym) matches an outdated name
+replacement_rows = []
+for _, row in species_new.iterrows():
+    row_values = {v for v in row if v is not np.nan}
+    if row_values & outdated:               # non-empty intersection
+        replacement_rows.append(row)
 
-for i in outdated:
-    for j, row in species_new.iterrows():
-        if i in list(row):
-            df_new = concat([df_new, DataFrame(row).T])
+df_new = DataFrame(replacement_rows, columns=species_new.columns)
 
-# some old valid names were considered unique but are now synonyms of the same valid name, therefore multiple duplicate rows could have been produced above
-# drop duplicate rows
+# drop columns absent from the old table
+df_new = df_new.drop(columns=["Family", "Order", "Superorder"])
 
-df_new = df_new.drop_duplicates(keep = "first")
+df_new = df_new.drop_duplicates(keep="first")
 
-# drop the rows of outdated species
-species_old = species_old[~species_old["Species"].isin(outdated)]
+# drop outdated rows from old table and append replacements
+species_old_updated = species_old[~species_old["Species"].isin(outdated)]
+species_old_updated = concat([species_old_updated, df_new], ignore_index=True)
 
+species_old_updated.to_excel("/Volumes/External_memory/Dropbox/FINS_dataset/Data/Master_files/lookup_tables/temp/Lookup_Taxonomy copy.xlsx", index = False)
+
+extant = []
+
+for i in species_old_updated["Species"]:
+    if i in species_new["Species"].values:
+        extant.append("extant")
+    else:
+        extant.append("extinct")
+
+species_old_updated["status"] = extant
 
 
 #### FINS comparison to see how many species were not considered extant incorrectly
