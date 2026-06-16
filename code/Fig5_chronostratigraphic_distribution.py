@@ -31,7 +31,7 @@ for index, row in occs.iterrows():
             stages_count[j] += 1
 
 
-epoch_chrono_names = ["Lower Cret.", "Upper Cret.", "Paleocene", "Eocene", "Oligocene", "Miocene", "Pliocene", "Pleistocene", "Holocene"]
+epoch_chrono_names = ["Early Cret.", "Late Cret.", "Paleocene", "Eocene", "Oligocene", "Miocene", "Pliocene", "Pleistocene", "Holocene"]
 epoch_vals = epochs_count
 epoch_cols = ['#8fd07b', '#67a155', '#e17c0a', '#df943e', '#f9b86d', '#ecbd0f', '#efca42', '#efd46e', '#f2dd8b']
 
