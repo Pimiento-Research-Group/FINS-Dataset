@@ -4,60 +4,42 @@ Author: Kristína Kocáková
 Description:
 Updating of species and genera from synonyms to valid names based on their identified names, a table of synonyms from Shark-References is
 required, see the data section of the FINS database GitHub page (https://github.com/Pimiento-Research-Group/FINS-Database/tree/main)
+Save the dictionary of synonyms as a file
 """
 
 from pandas import *
 import numpy as np
+import pickle
 
 #1. Create a dictionary of species synonyms, assign accepted names to species
+p = "/Volumes/External_memory/Dropbox/FINS_dataset/Data/Master_files/lookup_tables/Other version of Lookup Table/"
 
-lookup_taxonomy_fos = ExcelFile("/Users/kristinakocakova/Dropbox/Analyses/Data/Master files/Lookup_Taxonomy_version.30.3.xlsx")
-species = read_excel(lookup_taxonomy_fos, "Species")
+lookup_taxonomy_fos = ExcelFile(p + "Lookup_Taxonomy_version.30.3_Guinot.xlsx")
+df = read_excel(lookup_taxonomy_fos, "Species")
 
-species_names = species["Species"].to_list()
-first_syn = species["Synonym.1"] #not converted to list, needs to be dataframe for below to work
+# Initialize dictionary
+synonym_dyct = {}
 
-empty_syn1 = np.where(isnull(first_syn)) #rows with no synonyms
+# Loop over each row
+for _, row in df.iterrows():
+    valid_name = row.iloc[0]  # first column = valid name
 
-empty_syn1_indexes = []
-for i in empty_syn1:
-    for j in i:
-        empty_syn1_indexes.append(j) #had to convert it into a list
+    # Map the valid name to itself
+    synonym_dyct[valid_name] = valid_name
 
-no_syn_names = [] #species with no synonyms
+    # Remaining columns are synonyms
+    synonyms = row.iloc[1:]
 
-for i in empty_syn1_indexes:
-    j = species_names[i]
-    no_syn_names.append(j)
+    # Add each synonym if not NaN
+    for syn in synonyms:
+        if notna(syn):
+            synonym_dyct[syn] = valid_name
 
-#new dataframe with just species with synonyms
-species_syn = species.drop(species.index[empty_syn1], axis=0, inplace=False)
-speciess = species_syn["Species"].to_list() #list of species with synonyms
+# save dictionary
 
-#dictionary of valid names (keys) and synonyms (values)
-temp = species_syn.set_index("Species").T.to_dict("list") #converts a dataframe to dictionary using a specific column as index, i.e. keys
-synonym_dict = {k: [elem for elem in v if elem is not np.nan] for k, v in temp.items()} #gets rid of nans in values
+with open(p + "synonym_dict.pkl", "wb") as fyle:
+    pickle.dump(synonym_dyct, fyle)
 
-
-#this step needed to remove nans at the end of each value list, probably from the excel file
-for i in synonym_dict:
-    synonym_dict[i].remove(synonym_dict[i][-1])
-
-#reversed synonym dict, synonym (key), valid name (value)
-synonym_dict2 = {}
-
-for i in synonym_dict:
-    for j in synonym_dict[i]:
-        synonym_dict2[j] = i
-
-#add names with no synonyms, key and value the same
-for i in no_syn_names:
-    synonym_dict2[i] = i
-
-
-#add names which have synonyms to also contain themselves, i.e. key and value the same
-for i in speciess:
-    synonym_dict2[i] = i
 
 #assign the accepted names
 
@@ -71,8 +53,8 @@ accepted_names = occurrences["accepted_name"].to_list()
 
 for i, j in enumerate(identified_rank):
     if j == "species":
-        if identified_names[i] in synonym_dict2:
-            accepted_names[i] = synonym_dict2[identified_names[i]]
+        if identified_names[i] in synonym_dict:
+            accepted_names[i] = synonym_dict[identified_names[i]]
         else:
             accepted_names[i] = "unidentified"
 
