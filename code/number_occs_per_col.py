@@ -16,7 +16,7 @@ no_occ_dict = Counter(occurrences["collection_no"].to_list())
 
 no_occs = []
 
-for i, j in collections["collection_number"].to_list():
+for i, j in enumerate(collections["collection_number"].to_list()):
     no_occs.append(no_occ_dict[j])
 
 collections["no_occs_new"] = no_occs
